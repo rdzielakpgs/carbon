@@ -24,6 +24,7 @@ const Icon = React.forwardRef(
       tooltipVisible,
       tooltipBgColor,
       tooltipFontColor,
+      tooltipFlipOverrides,
       tabIndex,
       isPartOfInput,
       inputSize,
@@ -87,6 +88,7 @@ const Icon = React.forwardRef(
           inputSize={inputSize}
           bgColor={tooltipBgColor}
           fontColor={tooltipFontColor}
+          flipOverrides={tooltipFlipOverrides}
         >
           {icon}
         </Tooltip>
@@ -96,6 +98,8 @@ const Icon = React.forwardRef(
     return icon;
   }
 );
+
+const placements = ["top", "bottom", "left", "right"];
 
 Icon.propTypes = {
   /** Add classes to this component */
@@ -139,13 +143,29 @@ Icon.propTypes = {
   /** The message string to be displayed in the tooltip */
   tooltipMessage: PropTypes.string,
   /** The position to display the tooltip */
-  tooltipPosition: PropTypes.oneOf(["top", "bottom", "left", "right"]),
+  tooltipPosition: PropTypes.oneOf(placements),
   /** Control whether the tooltip is visible */
   tooltipVisible: PropTypes.bool,
   /** Override background color of the Tooltip, provide any color from palette or any valid css color value. */
   tooltipBgColor: PropTypes.string,
   /** Override font color of the Tooltip, provide any color from palette or any valid css color value. */
   tooltipFontColor: PropTypes.string,
+  /** Overrides the default flip behaviour of the Tooltip, must be an array containing some or all of ["top", "bottom", "left", "right"] (see https://popper.js.org/docs/v2/modifiers/flip/#fallbackplacements) */
+  tooltipFlipOverrides: (props, propName) => {
+    const prop = props[propName];
+    const isValid =
+      prop &&
+      Array.isArray(prop) &&
+      prop.every((placement) => placements.includes(placement));
+
+    if (!prop || isValid) {
+      return null;
+    }
+    return new Error(
+      // eslint-disable-next-line max-len
+      `The \`${propName}\` prop supplied to \`Icon\` must be an array containing some or all of ["top", "bottom", "left", "right"].`
+    );
+  },
   /** @ignore @private */
   isPartOfInput: PropTypes.bool,
   /** @ignore @private */

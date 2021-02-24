@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { Positions } from "../../utils/helpers/options-helper";
 export interface IconProps {
   className?: string;
   type: string;
@@ -15,10 +15,11 @@ export interface IconProps {
   ml?: number;
   ariaLabel?: string;
   tooltipMessage?: string;
-  tooltipPosition?: "top" | "bottom" | "left" | "right";
+  tooltipPosition?: Positions;
   tooltipVisible?: boolean;
   tooltipBgColor?: string;
   tooltipFontColor?: string;
+  tooltipFlipOverrides?: Array<Positions>;
 }
 
 declare const Icon: React.ComponentType<IconProps>;
