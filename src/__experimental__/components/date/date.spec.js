@@ -26,6 +26,14 @@ describe("Date", () => {
   let wrapper;
   let container;
 
+  beforeEach(() => {
+    jest.spyOn(global.console, "warn").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    global.console.warn.mockReset();
+  });
+
   describe("external validations", () => {
     it.each([["error"], ["warning"], ["info"]])(
       "should pass validation prop to the Textbox component",
@@ -48,8 +56,12 @@ describe("Date", () => {
     });
 
     it('should render with "allowEmptyValue" property and null value', () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+
       wrapper = render({ value: null, allowEmptyValue: true });
       expect(wrapper.find(Textbox).exists()).toBe(true);
+
+      global.console.error.mockReset();
     });
 
     it('should render with "allowEmptyValue" property and empty string value', () => {
