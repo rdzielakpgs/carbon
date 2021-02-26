@@ -45,6 +45,7 @@ Row.propTypes = {
   className: PropTypes.string,
   /** Define how wide the gutter between the rows and columns should be. */
   gutter: PropTypes.oneOf([
+    "none",
     "extra-small",
     "small",
     "medium-small",
