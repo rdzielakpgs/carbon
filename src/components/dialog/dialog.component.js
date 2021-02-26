@@ -289,7 +289,10 @@ Dialog.propTypes = {
   /** function runs when user click close button */
   onCancel: PropTypes.func,
   /* Function or reference to first element to focus */
-  focusFirstElement: PropTypes.func,
+  focusFirstElement: PropTypes.oneOfType([
+    PropTypes.shape({ current: PropTypes.any }),
+    PropTypes.func,
+  ]),
   /* Disables the focus trap when the dialog is open */
   disableFocusTrap: PropTypes.bool,
   /* Disables auto focus functionality on child elements */
