@@ -12,8 +12,8 @@ import {
   elementsTagTest,
   rootTagTest,
 } from "../../utils/helpers/tags/tags-specs";
-import SmallTheme from "../../style/themes/small";
-import MediumTheme from "../../style/themes/medium";
+import SmallTheme from "../../style/themes/mint";
+import MediumTheme from "../../style/themes/aegean";
 import { assertStyleMatch, keyboard } from "../../__spec_helper__/test-utils";
 import "jest-styled-components";
 import guid from "../../utils/helpers/guid";
