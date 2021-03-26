@@ -198,8 +198,8 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
       'tertiary',
       'tile',
       'transparent'
-    ].map(variant =>
-      <>
+    ].map((variant, index) =>
+      <React.Fragment key={`variants-pod-${index}`}>
         <Pod
           title="Title"
           subtitle="Subtitle"
@@ -211,7 +211,7 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
           {variant}
         </Pod>
         <div style={{ marginBottom: 24 }}/>
-      </>
+      </React.Fragment>
     )}
   </Story>
 </Preview>
@@ -226,8 +226,8 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
       'medium',
       'large',
       'extra-large'
-    ].map(padding =>
-      <>
+    ].map((padding, index) =>
+      <React.Fragment key={`pod-${index}`}>
         <Pod
           title="Title"
           subtitle="Subtitle"
@@ -239,7 +239,7 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
           {padding}
         </Pod>
         <div style={{ marginBottom: 24 }}/>
-      </>
+      </React.Fragment>
     )}
   </Story>
 </Preview>
@@ -252,8 +252,8 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
       'left',
       'center',
       'right',
-    ].map(alignment =>
-      <>
+    ].map((alignment, index) =>
+      <React.Fragment key={`pod-${index}`}>
         <Pod
           title="Title"
           subtitle="Subtitle"
@@ -265,7 +265,7 @@ The `PodManager` does not work if `Pod` uses `collapsed` prop
           {alignment}
         </Pod>
         <div style={{ marginBottom: 24 }}/>
-      </>
+      </React.Fragment>
     )}
   </Story>
 </Preview>
