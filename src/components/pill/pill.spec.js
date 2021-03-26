@@ -147,8 +147,13 @@ describe("Pill", () => {
 
     const wrongColors = ["rgb(0,0)", "#ff", "test"];
     describe.each(wrongColors)("when wrong color prop is provided", (color) => {
+      beforeEach(() => {
+        jest.spyOn(global.console, "error").mockImplementation(() => {});
+      });
+
+      afterAll(() => global.error.mockReset());
+
       it("throws an error", () => {
-        jest.spyOn(global.console, "error");
         mount(<Pill borderColor={color}>My Text</Pill>);
         // eslint-disable-next-line no-console
         expect(console.error).toHaveBeenCalled();
