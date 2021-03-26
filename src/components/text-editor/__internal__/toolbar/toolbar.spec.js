@@ -196,6 +196,8 @@ describe("Toolbar", () => {
     });
 
     it(`calls expected callback when 'enter' key is pressed and '${id.toLowerCase()}' button is focused`, () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+
       act(() => {
         wrapper.find(StyledToolbarButton).at(index).simulate("focus");
       });
@@ -208,9 +210,13 @@ describe("Toolbar", () => {
         expect(setBlockStyle).toHaveBeenCalledWith(expect.anything(), id);
         expect(setInlineStyle).not.toHaveBeenCalled();
       }
+
+      global.console.error.mockReset();
     });
 
     it(`calls expected callback when 'space' key is pressed and '${id.toLowerCase()}' button is focused`, () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+
       act(() => {
         wrapper.find(StyledToolbarButton).at(index).simulate("focus");
       });
@@ -223,9 +229,13 @@ describe("Toolbar", () => {
         expect(setBlockStyle).toHaveBeenCalledWith(expect.anything(), id);
         expect(setInlineStyle).not.toHaveBeenCalled();
       }
+
+      global.console.error.mockReset();
     });
 
     it(`does nothing when key is not 'space' or 'enter' and '${id.toLowerCase()}' button is focused`, () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+
       act(() => {
         wrapper.find(StyledToolbarButton).at(index).simulate("focus");
       });
@@ -235,13 +245,19 @@ describe("Toolbar", () => {
 
       expect(setBlockStyle).not.toHaveBeenCalled();
       expect(setInlineStyle).not.toHaveBeenCalled();
+
+      global.console.error.mockReset();
     });
   });
 
   describe("tooltip", () => {
     beforeEach(() => {
       wrapper = render({});
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
     });
+
+    afterAll(() => global.console.error.mockReset());
+
     it.each([0, 1, 2, 3])(
       "shows when the style control at position %s on mouse enter and hides on leave",
       (i) => {
