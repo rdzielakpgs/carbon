@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -10,6 +10,8 @@ import {
   StyledControl,
 } from "./duelling-picklist.style";
 
+export const FocusContext = React.createContext({});
+
 const DuellingPicklist = ({
   children,
   disabled,
@@ -20,33 +22,53 @@ const DuellingPicklist = ({
 }) => {
   const shouldDisplayLabels = leftLabel || rightLabel;
   const shouldDisplayControls = leftControls || rightControls;
+  const [itemToFocus, setItemToFocus] = useState(undefined);
+  const [isGroup, setIsGroup] = useState(undefined);
+
+  const addItemToFocus = useCallback((item, group) => {
+    setItemToFocus(item);
+    setIsGroup(group);
+  }, []);
+
+  const pickListChildren = React.Children.map(
+    children,
+    (child) =>
+      child &&
+      React.cloneElement(child, {
+        itemToFocus,
+        isGroup,
+        ...child.props,
+      })
+  );
 
   return (
     <StyledDuellingPicklistOverlay
       disabled={disabled}
       data-component="duelling-picklist"
     >
-      {shouldDisplayLabels && (
-        <StyledLabelContainer>
-          <StyledLabel data-element="picklist-left-label">
-            {leftLabel}
-          </StyledLabel>
-          <StyledLabel data-element="picklist-right-label">
-            {rightLabel}
-          </StyledLabel>
-        </StyledLabelContainer>
-      )}
-      {shouldDisplayControls && (
-        <StyledControlsContainer>
-          <StyledControl data-element="picklist-left-control">
-            {leftControls}
-          </StyledControl>
-          <StyledControl data-element="picklist-right-label">
-            {rightControls}
-          </StyledControl>
-        </StyledControlsContainer>
-      )}
-      <StyledDuellingPicklist>{children}</StyledDuellingPicklist>
+      <FocusContext.Provider value={{ addItemToFocus }}>
+        {shouldDisplayLabels && (
+          <StyledLabelContainer>
+            <StyledLabel data-element="picklist-left-label">
+              {leftLabel}
+            </StyledLabel>
+            <StyledLabel data-element="picklist-right-label">
+              {rightLabel}
+            </StyledLabel>
+          </StyledLabelContainer>
+        )}
+        {shouldDisplayControls && (
+          <StyledControlsContainer>
+            <StyledControl data-element="picklist-left-control">
+              {leftControls}
+            </StyledControl>
+            <StyledControl data-element="picklist-right-label">
+              {rightControls}
+            </StyledControl>
+          </StyledControlsContainer>
+        )}
+        <StyledDuellingPicklist>{pickListChildren}</StyledDuellingPicklist>
+      </FocusContext.Provider>
     </StyledDuellingPicklistOverlay>
   );
 };

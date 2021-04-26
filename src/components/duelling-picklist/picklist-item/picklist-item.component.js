@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
 
@@ -8,6 +8,7 @@ import {
   StyledLockIcon,
 } from "./picklist-item.style";
 import Events from "../../../utils/helpers/events";
+import { FocusContext } from "../duelling-picklist.component";
 
 const PicklistItem = React.forwardRef(
   (
@@ -24,15 +25,22 @@ const PicklistItem = React.forwardRef(
     },
     ref
   ) => {
-    const handleClick = useCallback(() => onChange(item), [onChange, item]);
+    const { addItemToFocus } = useContext(FocusContext);
+
+    const handleClick = useCallback(() => {
+      onChange(item);
+      addItemToFocus(item);
+    }, [item, onChange, addItemToFocus]);
+
     const handleKeydown = useCallback(
       (event) => {
         if (Events.isEnterKey(event) || Events.isSpaceKey(event)) {
           event.preventDefault();
           onChange(item);
+          addItemToFocus(item);
         }
       },
-      [onChange, item]
+      [onChange, item, addItemToFocus]
     );
 
     return (

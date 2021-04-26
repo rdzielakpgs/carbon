@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -8,20 +8,56 @@ import {
   StyledGroupButton,
 } from "./picklist-group.style";
 import Events from "../../../utils/helpers/events/events";
+import { FocusContext } from "../duelling-picklist.component";
+import { checkItem, getRefs } from "../__internal__/utils";
 
 const PicklistGroup = React.forwardRef(
-  ({ title, children, type, onChange, ...rest }, ref) => {
+  (
+    { title, children, type, onChange, itemToFocus, groupIndex, ...rest },
+    ref
+  ) => {
+    const { addItemToFocus } = useContext(FocusContext);
     const [highlighted, setHighlighted] = useState(false);
-    const handleClick = useCallback(() => onChange(), [onChange]);
+    const refs = getRefs(React.Children.count(children));
+
+    const handleClick = useCallback(() => {
+      onChange();
+      addItemToFocus(groupIndex, true);
+    }, [addItemToFocus, groupIndex, onChange]);
+
     const handleKeydown = useCallback(
       (event) => {
         if (Events.isEnterKey(event) || Events.isSpaceKey(event)) {
           event.preventDefault();
           onChange();
+          addItemToFocus(groupIndex, true);
         }
       },
-      [onChange]
+      [addItemToFocus, groupIndex, onChange]
     );
+
+    const content = React.Children.map(
+      children,
+      (child, index) =>
+        child &&
+        React.cloneElement(child, {
+          ref: refs[index],
+          ...child.props,
+        })
+    );
+
+    useEffect(() => {
+      if (itemToFocus !== undefined) {
+        const index = React.Children.toArray(children).findIndex((child) =>
+          checkItem(child.props.item, itemToFocus)
+        );
+
+        if (index > -1) {
+          refs[index].current.focus();
+          addItemToFocus(undefined);
+        }
+      }
+    }, [children, itemToFocus, refs, addItemToFocus]);
 
     return (
       <CSSTransition
@@ -37,7 +73,6 @@ const PicklistGroup = React.forwardRef(
         <StyledGroupWrapper highlighted={highlighted} type={type}>
           <StyledPicklistGroup
             onKeyDown={handleKeydown}
-            ref={ref}
             data-element="picklist-group"
           >
             {title}
@@ -50,9 +85,10 @@ const PicklistGroup = React.forwardRef(
               onMouseLeave={() => setHighlighted(false)}
               onFocus={() => setHighlighted(true)}
               onBlur={() => setHighlighted(false)}
+              ref={ref}
             />
           </StyledPicklistGroup>
-          <TransitionGroup component={null}>{children}</TransitionGroup>
+          <TransitionGroup component={null}>{content}</TransitionGroup>
         </StyledGroupWrapper>
       </CSSTransition>
     );
@@ -68,6 +104,15 @@ PicklistGroup.propTypes = {
   type: PropTypes.oneOf(["add", "remove"]).isRequired,
   /** Handler invoked when add/remove button is clicked or when space/enter is pressed on the whole item */
   onChange: PropTypes.func.isRequired,
+
+  /** @private @ignore */
+  itemToFocus: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  /** @private @ignore */
+  groupIndex: PropTypes.number,
 };
 
 export default PicklistGroup;
