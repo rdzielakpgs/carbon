@@ -56,7 +56,7 @@ const Tabs = ({
   } else {
     historyAPI = history;
   }
-  const isInSidebar = !!(sidebarContext && sidebarContext.isInSidebar);
+  const isInSidebar = !!sidebarContext?.isInSidebar;
 
   useLayoutEffect(() => {
     if (firstRender.current) {
@@ -89,7 +89,7 @@ const Tabs = ({
       }
       setSelectedTabIdState(selectedTab);
     }
-  }, [historyAPI.location?.hash, children, firstRender, selectedTabId]);
+  }, [children, firstRender, historyAPI.location, selectedTabId]);
 
   const updateErrors = useCallback(
     (id, hasError) => {
@@ -131,14 +131,7 @@ const Tabs = ({
         onTabChange(tabid);
       }
     },
-    [
-      historyAPI.history,
-      historyAPI.location?.origin,
-      historyAPI.location?.pathname,
-      sidebarContext,
-      onTabChange,
-      setLocation,
-    ]
+    [setLocation, sidebarContext, onTabChange, historyAPI, navigatorMethod]
   );
 
   /** Determines if the tab titles are in a vertical format. */
@@ -158,8 +151,9 @@ const Tabs = ({
   const focusTab = (ref) => ref.focus();
 
   /** The children nodes converted into an Array */
-  const filteredChildren = () =>
-    React.Children.toArray(children).filter((child) => child);
+  const filteredChildren = useCallback(() =>
+    React.Children.toArray(children).filter((child) => child)
+  );
 
   /** Array of the tabIds for the child nodes */
   const tabIds = () => {
@@ -347,6 +341,24 @@ const Tabs = ({
 
     return tabs;
   };
+
+  useEffect(() => {
+    const stopListen = historyAPI.listen(({ action, location }) => {
+      const { hash } = location;
+      const splitHash = hash?.split("#");
+      const tabId =
+        splitHash.length > 1 ? splitHash[splitHash.length - 1] : undefined;
+
+      if (action === "POP" && tabId === undefined) {
+        // back pressed and no hash vid available
+        setSelectedTabIdState(previousSelectedTabId.current);
+      } else if (tabId !== undefined && tabId !== selectedTabIdState) {
+        setSelectedTabIdState(tabId);
+      }
+    });
+
+    return () => stopListen();
+  }, [filteredChildren, historyAPI, selectedTabId, selectedTabIdState]);
 
   useEffect(() => {
     if (previousSelectedTabId.current !== selectedTabId) {
