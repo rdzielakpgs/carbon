@@ -17,7 +17,7 @@ const cucumber = require("cypress-cucumber-preprocessor").default;
 // this line is required to avoid memory leak
 require("events").EventEmitter.setMaxListeners = 150; // value should be updated due to amount of regression files (150)
 
-module.exports = (on) => {
+module.exports = (on, config) => {
   on("file:preprocessor", cucumber());
   on("task", {
     log(message) {
@@ -45,4 +45,12 @@ module.exports = (on) => {
     }
     return launchOptions;
   });
+
+  /**
+   * @type {Cypress.PluginConfig}
+   */
+  // eslint-disable-next-line global-require
+  require("@cypress/react/plugins/react-scripts")(on, config);
+
+  return config;
 };

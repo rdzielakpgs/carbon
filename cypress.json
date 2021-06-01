@@ -23,5 +23,7 @@
   "retries": {
     "runMode": 1,
     "openMode": 1
-  }
+  },
+  "testFiles": "**/*.test.tsx",
+  "componentFolder": "src/components"
 }
