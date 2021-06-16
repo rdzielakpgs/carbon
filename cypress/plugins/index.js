@@ -1,3 +1,5 @@
+const injectDevServer = require("@cypress/react/plugins/react-scripts");
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -7,14 +9,11 @@
 // You can read more here:
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
-
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-
 // eslint-disable-next-line import/no-extraneous-dependencies
-const cucumber = require("cypress-cucumber-preprocessor").default;
+const cucumber = require("cypress-cucumber-preprocessor").default; // this line is required to avoid memory leak
 
-// this line is required to avoid memory leak
 require("events").EventEmitter.setMaxListeners = 150; // value should be updated due to amount of regression files (150)
 
 module.exports = (on, config) => {
@@ -24,6 +23,7 @@ module.exports = (on, config) => {
       console.log(message);
       return null;
     },
+
     table(message) {
       console.table(message);
       return null;
@@ -32,25 +32,28 @@ module.exports = (on, config) => {
   on("before:browser:launch", (browser = {}, launchOptions) => {
     if (browser.family === "chromium" && browser.name !== "electron") {
       launchOptions.args.push("--disable-site-isolation-trials");
-      launchOptions.args.push("--disable-gpu");
-      // disable update for chrome for CI
+      launchOptions.args.push("--disable-gpu"); // disable update for chrome for CI
+
       launchOptions.args.push(
         `--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'`
       );
     }
+
     if (browser.name === "firefox") {
       // works only for macOS
       // issue for Win https://bugzilla.mozilla.org/show_bug.cgi?id=855899
       launchOptions.args.push("-new-instance");
     }
+
     return launchOptions;
   });
-
   /**
    * @type {Cypress.PluginConfig}
    */
-  // eslint-disable-next-line global-require
-  require("@cypress/react/plugins/react-scripts")(on, config);
 
-  return config;
+  if (config.testingType === "component") {
+    injectDevServer(on, config);
+  }
+
+  return config; // IMPORTANT to return a config
 };

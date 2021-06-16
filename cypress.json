@@ -24,6 +24,6 @@
     "runMode": 1,
     "openMode": 1
   },
-  "testFiles": "**/*.test.tsx",
-  "componentFolder": "src/components"
+  "testFiles": "**/*.test.js",
+  "componentFolder": "src/components/app-wrapper"
 }
