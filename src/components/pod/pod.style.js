@@ -3,7 +3,6 @@ import { margin } from "styled-system";
 
 import { baseTheme } from "../../style/themes";
 import Link from "../link";
-import Icon from "../icon";
 import StyledIcon from "../icon/icon.style";
 
 const StyledPod = styled.div`
@@ -92,8 +91,6 @@ const StyledContent = styled.div`
   text-align: left;
   padding: ${({ size }) => contentPaddings[size]};
 `;
-
-const StyledCollapsibleContent = styled.div``;
 
 const StyledDescription = styled.div`
   background: none;
@@ -229,15 +226,9 @@ const headerRightAlignMargins = {
 };
 
 const StyledHeader = styled.div`
-  ${({ alignTitle, internalEditButton, size, isCollapsed }) => css`
+  ${({ alignTitle, internalEditButton, size }) => css`
     margin-bottom: 24px;
     text-align: ${alignTitle};
-
-    ${isCollapsed === true &&
-    css`
-      margin-bottom: 0;
-      cursor: pointer;
-    `};
 
     ${alignTitle === "right" &&
     internalEditButton &&
@@ -259,16 +250,7 @@ const StyledTitle = styled.h4`
   font-weight: 600;
 `;
 
-const StyledArrow = styled(Icon).attrs({ type: "dropdown" })`
-  position: relative;
-  top: -1px;
-  ${({ isCollapsed }) => isCollapsed && "transform: rotate(180deg)"};
-`;
-
 StyledBlock.defaultProps = {
-  theme: baseTheme,
-};
-StyledCollapsibleContent.defaultProps = {
   theme: baseTheme,
 };
 StyledContent.defaultProps = {
@@ -298,14 +280,9 @@ StyledSubtitle.defaultProps = {
 StyledTitle.defaultProps = {
   theme: baseTheme,
 };
-StyledArrow.defaultProps = {
-  theme: baseTheme,
-  type: "dropdown",
-};
 
 export {
   StyledBlock,
-  StyledCollapsibleContent,
   StyledContent,
   StyledDescription,
   StyledEditAction,
@@ -315,5 +292,4 @@ export {
   StyledHeader,
   StyledSubtitle,
   StyledTitle,
-  StyledArrow,
 };
