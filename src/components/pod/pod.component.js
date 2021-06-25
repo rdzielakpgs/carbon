@@ -10,7 +10,6 @@ import PodContext from "./pod-context";
 import {
   StyledBlock,
   StyledContent,
-  StyledDescription,
   StyledEditAction,
   StyledEditContainer,
   StyledFooter,
@@ -65,19 +64,6 @@ class Pod extends React.Component {
         )}
       </StyledHeader>
     );
-  }
-
-  podDescription() {
-    const { description } = this.props;
-
-    if (description) {
-      return (
-        <StyledDescription data-element="description">
-          {description}
-        </StyledDescription>
-      );
-    }
-    return null;
   }
 
   footer() {
@@ -221,7 +207,6 @@ class Pod extends React.Component {
         >
           <StyledContent data-element="content" size={size}>
             {this.podHeader()}
-            {this.podDescription()}
             <div>{this.props.children}</div>
           </StyledContent>
           {this.footer()}
@@ -287,11 +272,6 @@ Pod.propTypes = {
    * Aligns the title to left, right or center
    */
   alignTitle: PropTypes.oneOf(["left", "center", "right"]),
-
-  /**
-   * Description for the pod
-   */
-  description: PropTypes.string,
 
   /**
    * A component to render as a Pod footer.

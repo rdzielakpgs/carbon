@@ -7,7 +7,6 @@ import Pod from "./pod.component";
 import Button from "../button";
 import {
   StyledBlock,
-  StyledDescription,
   StyledEditAction,
   StyledEditContainer,
   StyledFooter,
@@ -69,19 +68,6 @@ describe("Pod", () => {
       },
       wrapper.find(StyledBlock)
     );
-  });
-
-  describe("podDescription", () => {
-    it("renders a description when description prop is passed", () => {
-      wrapper.setProps({ description: "Description" });
-      expect(wrapper.find(StyledDescription).props().children).toEqual(
-        "Description"
-      );
-    });
-
-    it("does not render description when description prop is not passed", () => {
-      expect(wrapper.find(StyledDescription).exists()).toEqual(false);
-    });
   });
 
   describe("podFooter", () => {
