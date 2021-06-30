@@ -1,0 +1,91 @@
+import { Meta, Story, Preview } from "@storybook/addon-docs/blocks";
+import { action } from "@storybook/addon-actions";
+
+import Pager from ".";
+
+<Meta
+  title="Design System/Pager/Test"
+  parameters={{
+    info: { disable: true },
+    chromatic: {
+      disable: true,
+    },
+    knobs: {
+      disable: true,
+    },
+  }}
+  argTypes={{
+    pageSize: {
+      options: [1, 10, 25, 50, 100],
+      control: {
+        type: "select",
+      },
+    },
+    variant: {
+      options: ["default", "alternate"],
+      control: {
+        type: "select",
+      },
+    },
+  }}
+/>
+
+export const PagerStory = (args) => {
+  const handlePagination = (e) => {
+    action("onPagination")(e);
+  };
+  const handleOnNext = (e) => {
+    action("onNext")(e);
+  };
+  const handleOnPrevious = (e) => {
+    action("onPrevious")(e);
+  };
+  const handleOnFirst = (e) => {
+    action("onFirst")(e);
+  };
+  const handleOnLast = (e) => {
+    action("onLast")(e);
+  };
+  return (
+    <Pager
+      pageSizeSelectionOptions={[
+        { id: "1", name: 1 },
+        { id: "10", name: 10 },
+        { id: "25", name: 25 },
+        { id: "50", name: 50 },
+        { id: "100", name: 100 },
+      ]}
+      onPagination={handlePagination}
+      onNext={handleOnNext}
+      onPrevious={handleOnPrevious}
+      onFirst={handleOnFirst}
+      onLast={handleOnLast}
+      {...args}
+    />
+  );
+};
+
+# Pager
+
+### Default
+
+<Preview>
+  <Story
+    name="default"
+    args={{
+      totalRecords: "100",
+      showPageSizeSelection: false,
+      pageSize: 10,
+      currentPage: "1",
+      variant: "default",
+      showPageSizeLabelBefore: true,
+      showPageSizeLabelAfter: true,
+      showTotalRecords: true,
+      showFirstAndLastButtons: true,
+      showPreviousAndNextButtons: true,
+      showPageCount: true,
+    }}
+  >
+    {PagerStory.bind({})}
+  </Story>
+</Preview>

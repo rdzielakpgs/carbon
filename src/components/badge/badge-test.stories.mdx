@@ -1,0 +1,46 @@
+import { Meta, Story, Preview } from "@storybook/addon-docs/blocks";
+import { action } from "@storybook/addon-actions";
+
+import Badge from "./badge.component";
+import Button from "../button";
+
+<Meta
+  title="Design system/Badge/Test"
+  parameters={{
+    info: { disable: true },
+    chromatic: {
+      disable: true,
+    },
+    knobs: {
+      disable: true,
+    },
+  }}
+/>
+
+export const BadgeStory = (args) => {
+  const handleClick = () => {
+    action("click")();
+  };
+  return (
+    <Badge onClick={handleClick} {...args}>
+      <Button style={{ marginRight: 0 }} buttonType="tertiary">
+        Filter
+      </Button>
+    </Badge>
+  );
+};
+
+# Badge
+
+### Default
+
+<Preview>
+  <Story
+    name="default"
+    args={{
+      counter: 1,
+    }}
+  >
+    {BadgeStory.bind({})}
+  </Story>
+</Preview>

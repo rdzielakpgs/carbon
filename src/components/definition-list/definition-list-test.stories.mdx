@@ -1,0 +1,35 @@
+import { Meta, Story, Preview } from "@storybook/addon-docs/blocks";
+
+import { Dl, Dt, Dd } from "./";
+
+<Meta
+  title="Test/Definition List"
+  parameters={{
+    info: { disable: true },
+    chromatic: {
+      disable: true,
+    },
+    knobs: {
+      disable: true,
+    },
+  }}
+/>
+
+export const DefinitionListStory = () => (
+  <Dl data-component="definition-list">
+    <Dt>Title</Dt>
+    <Dd>Description</Dd>
+    <>
+      <Dt>Title inside of React Fragment</Dt>
+      <Dd>Description inside of React Fragment</Dd>
+    </>
+  </Dl>
+);
+
+# Definition list
+
+### Default
+
+<Preview>
+  <Story name="default">{DefinitionListStory.bind({})}</Story>
+</Preview>

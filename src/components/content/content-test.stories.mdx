@@ -1,0 +1,53 @@
+import { Meta, Story, Preview } from "@storybook/addon-docs/blocks";
+
+import Content from "./content.component.js";
+
+<Meta
+  title="Design System/Content/Test"
+  parameters={{
+    info: { disable: true },
+    chromatic: {
+      disable: true,
+    },
+    knobs: {
+      disable: true,
+    },
+  }}
+  argTypes={{
+    variant: {
+      options: ["primary", "secondary"],
+      control: {
+        type: "select",
+      },
+    },
+    align: {
+      options: ["left", "center", "right"],
+      control: {
+        type: "select",
+      },
+    },
+  }}
+/>
+
+export const ContentStory = (args) => <Content {...args} />;
+
+# Content
+
+### Default
+
+<Preview>
+  <Story
+    name="default"
+    args={{
+      children: "An example of some content.",
+      title: "Content Component",
+      variant: undefined,
+      inline: false,
+      align: undefined,
+      titleWidth: "",
+      bodyFullWidth: false,
+    }}
+  >
+    {ContentStory.bind({})}
+  </Story>
+</Preview>

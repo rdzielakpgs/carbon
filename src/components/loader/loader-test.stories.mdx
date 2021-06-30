@@ -1,0 +1,40 @@
+import { Meta, Story, Preview } from "@storybook/addon-docs/blocks";
+
+import Loader from ".";
+import Button from "../button";
+
+<Meta
+  title="Design System/Loader/Test"
+  parameters={{
+    info: { disable: true },
+    chromatic: {
+      disable: true,
+    },
+    knobs: {
+      disable: true,
+    },
+  }}
+/>
+
+export const LoaderStory = ({ isInsideButton, size, isActive, ...args }) => {
+  if (isInsideButton) {
+    return (
+      <Button buttonType="primary" disabled={!isActive}>
+        <Loader {...args} />
+      </Button>
+    );
+  }
+  return <Loader size={size} />;
+};
+
+# Loader
+
+### Default
+
+<Preview>
+  <Story name="default" args={{
+      isInsideButton: false,
+      size: Loader.defaultProps.size,
+      isActive: Loader.defaultProps.isActive
+  }}>{LoaderStory.bind({})}</Story>
+</Preview>
