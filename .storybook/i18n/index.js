@@ -1,8 +1,8 @@
 import I18nProvider from "../../src/components/i18n-provider";
-import frFR from "./fr-FR";
+import plPL from "./pl-PL";
 
 export default (Story) => (
-  <I18nProvider locale={frFR}>
+  <I18nProvider locale={plPL}>
     <Story />
   </I18nProvider>
 );
