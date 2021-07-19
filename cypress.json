@@ -11,7 +11,7 @@
   "failOnStatusCode": false,
   "ignoreTestFiles": [
     "**/examples/*",
-    "**/!(*.spec).js"
+    "**/*.spec.js"
   ],
   "integrationFolder": "cypress/features",
   "numTestsKeptInMemory": 1,
@@ -24,6 +24,8 @@
     "runMode": 1,
     "openMode": 1
   },
-  "testFiles": "**/*.test.js",
-  "componentFolder": "src/components/app-wrapper"
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*.test.js"
+  }
 }

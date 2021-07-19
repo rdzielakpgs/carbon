@@ -52,7 +52,7 @@ module.exports = (on, config) => {
    */
 
   if (config.testingType === "component") {
-    injectDevServer(on, config);
+    injectDevServer(on, { ...config, addTranspiledFolders: [".storybook"] });
   }
 
   return config; // IMPORTANT to return a config
