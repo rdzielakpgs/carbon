@@ -8,9 +8,9 @@ export interface SimpleColorProps {
   /** called when the user selects or deselects this color option */
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   /** Prop for `onBlur` events */
-  onBlur?: (ev: React.ChangeEvent<HTMLElement>) => void;
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement>) => void;
   /** Prop for `onMouseDown` events */
-  onMouseDown?: (ev: React.SyntheticEvent) => void;
+  onMouseDown?: (ev: React.MouseEvent<HTMLInputElement>) => void;
   /** determines if this color option is selected or unselected */
   checked?: boolean;
   /** [Legacy] Custom classname */

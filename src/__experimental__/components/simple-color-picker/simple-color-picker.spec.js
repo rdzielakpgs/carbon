@@ -5,10 +5,11 @@ import { mount } from "enzyme";
 import { SimpleColor, SimpleColorPicker } from ".";
 import { StyledColorOptions } from "./simple-color-picker.style";
 import baseTheme from "../../../style/themes/base";
-import { StyledLegendContainer } from "../../../__internal__/fieldset/fieldset.style";
+import { StyledLegend } from "../../../__internal__/fieldset/fieldset.style";
 import {
   assertStyleMatch,
   testStyledSystemMargin,
+  expectError,
 } from "../../../__spec_helper__/test-utils";
 import StyledValidationIcon from "../../../components/validations/validation-icon.style";
 import Fieldset from "../../../__internal__/fieldset";
@@ -528,10 +529,7 @@ describe("SimpleColorPicker", () => {
       it("renders validation icon by the input", () => {
         const wrapper = render(mount, { [type]: "Message" });
         expect(
-          wrapper
-            .find(StyledLegendContainer)
-            .find(StyledValidationIcon)
-            .exists()
+          wrapper.find(StyledLegend).find(StyledValidationIcon).exists()
         ).toBe(false);
         expect(wrapper.find(StyledValidationIcon).exists()).toBe(true);
       });
@@ -542,10 +540,7 @@ describe("SimpleColorPicker", () => {
           validationOnLegend: true,
         });
         expect(
-          wrapper
-            .find(StyledLegendContainer)
-            .find(StyledValidationIcon)
-            .exists()
+          wrapper.find(StyledLegend).find(StyledValidationIcon).exists()
         ).toBe(true);
       });
 
@@ -582,8 +577,11 @@ describe("SimpleColorPicker", () => {
 
   describe("propTypes", () => {
     it("validates the incorrect children prop", () => {
-      jest.spyOn(global.console, "error").mockImplementation(() => {});
+      const errorMessage =
+        "Warning: Failed prop type: `SimpleColorPicker` only accepts children of" +
+        " type `SimpleColor`.\n    in SimpleColorPicker";
 
+      const assert = expectError(errorMessage);
       mount(
         <SimpleColorPicker name={name} legend="SimpleColorPicker Legend">
           <p>Invalid children</p>
@@ -591,11 +589,7 @@ describe("SimpleColorPicker", () => {
         </SimpleColorPicker>
       );
 
-      const expected =
-        "Warning: Failed prop type: `SimpleColorPicker` only accepts children of" +
-        " type `SimpleColor`.\n    in SimpleColorPicker";
-
-      expect(console.error).toHaveBeenCalledWith(expected); // eslint-disable-line no-console
+      assert();
     });
   });
 

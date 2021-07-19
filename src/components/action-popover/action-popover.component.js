@@ -14,9 +14,9 @@ import Events from "../../utils/helpers/events";
 import { filterStyledSystemMarginProps } from "../../style/utils";
 import Popover from "../../__internal__/popover";
 import createGuid from "../../utils/helpers/guid";
-import ActionPopoverMenu from "./action-popover-menu.component";
-import ActionPopoverItem from "./action-popover-item.component";
-import ActionPopoverDivider from "./action-popover-divider.component";
+import ActionPopoverMenu from "./action-popover-menu/action-popover-menu.component";
+import ActionPopoverItem from "./action-popover-item/action-popover-item.component";
+import ActionPopoverDivider from "./action-popover-divider/action-popover-divider.component";
 import ActionPopoverContext from "./action-popover-context";
 
 const marginPropTypes = filterStyledSystemMarginProps(
@@ -31,6 +31,7 @@ const ActionPopover = ({
   rightAlignMenu,
   renderButton,
   placement = "bottom",
+  horizontalAlignment,
   ...rest
 }) => {
   const [isOpen, setOpenState] = useState(false);
@@ -153,6 +154,7 @@ const ActionPopover = ({
     setOpen,
     rightAlignMenu,
     placement,
+    horizontalAlignment,
   };
 
   return (
@@ -228,6 +230,8 @@ ActionPopover.propTypes = {
   },
   /** Render a custom menu button to override default ellipsis icon */
   renderButton: PropTypes.func,
+  /** Horizontal alignment of menu items content */
+  horizontalAlignment: PropTypes.oneOf(["left", "right"]),
   /** Set whether the menu should open above or below the button */
   placement: PropTypes.oneOf(["top", "bottom"]),
 };
@@ -239,6 +243,7 @@ ActionPopover.defaultProps = {
   id: null,
   onOpen,
   onClose,
+  horizontalAlignment: "left",
 };
 
 export default ActionPopover;

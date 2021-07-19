@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Editor, Modifier } from "draft-js";
 import { act } from "react-dom/test-utils";
-import { mount } from "enzyme";
+import { shallow, mount } from "enzyme";
 import { ThemeProvider } from "styled-components";
 import {
   assertStyleMatch,
   testStyledSystemMargin,
+  expectError,
 } from "../../__spec_helper__/test-utils";
 import mintTheme from "../../style/themes/mint";
 import TextEditor, {
@@ -24,7 +25,9 @@ import guid from "../../utils/helpers/guid/guid";
 import Label from "../../__experimental__/components/label";
 import LabelWrapper from "./__internal__/label-wrapper";
 import ValidationIcon from "../validations";
+import EditorLinkPreview from "../link-preview";
 import { isSafari } from "../../utils/helpers/browser-type-check";
+import IconButton from "../icon-button";
 
 jest.mock("../../utils/helpers/browser-type-check");
 isSafari.mockImplementation(() => false);
@@ -109,6 +112,7 @@ describe("TextEditor", () => {
         value={createContent()}
         labelText="Text Editor Label"
         labelId="foo"
+        onChange={jest.fn}
         {...props}
       />
     ));
@@ -908,16 +912,94 @@ describe("TextEditor", () => {
   });
 
   describe("custom row prop type", () => {
-    it("throws an error if value less than 2 passed", () => {
-      jest.spyOn(global.console, "error");
-      wrapper = render({ rows: 1 });
-      expect(console.error).toHaveBeenCalled();
+    describe("when value is number less than 2", () => {
+      it("throws an error", () => {
+        TextEditor.displayName = "EditorWithRowsLessThan2";
+        const errorMessage =
+          "Warning: Failed prop type: Prop `rows` must be a number value greater than 2 to override the min-height of the `EditorWithRowsLessThan2`";
+
+        const assert = expectError(errorMessage);
+        render({ rows: 1 }, shallow);
+        assert();
+      });
     });
 
-    it("throws an error if value is not a number", () => {
-      jest.spyOn(global.console, "error");
-      wrapper = render({ rows: "foo" });
-      expect(console.error).toHaveBeenCalled();
+    describe("when value is not a number", () => {
+      it("throws an error", () => {
+        TextEditor.displayName = "EditorWithRowsAsString";
+        const errorMessage =
+          "Warning: Failed prop type: Prop `rows` must be a number value greater than 2 to override the min-height of the `EditorWithRowsAsString`";
+
+        const assert = expectError(errorMessage);
+        render({ rows: "foo" }, shallow);
+        assert();
+      });
+    });
+  });
+
+  describe("Link previews", () => {
+    const onLinkAdded = jest.fn();
+
+    it("reports the url when a valid one is added and enter is pressed", () => {
+      const url = "http://foo.com";
+      wrapper = render({ onLinkAdded });
+
+      act(() => {
+        wrapper
+          .find(TextEditor)
+          .props()
+          .onChange(addToEditorState(url, wrapper.find(Editor).props()));
+      });
+      act(() => {
+        wrapper.update();
+      });
+      act(() => {
+        wrapper.find(Editor).props().handleKeyCommand("split-block");
+      });
+
+      expect(onLinkAdded).toHaveBeenCalledWith(url);
+    });
+
+    it("reports the url when a valid one is inputted and space is pressed", () => {
+      const url = "http://foo.com";
+      wrapper = render({ onLinkAdded });
+
+      act(() => {
+        wrapper
+          .find(TextEditor)
+          .props()
+          .onChange(addToEditorState(url, wrapper.find(Editor).props()));
+      });
+      act(() => {
+        wrapper.update();
+      });
+      act(() => {
+        wrapper.find(Editor).props().handleBeforeInput(" ");
+      });
+
+      expect(onLinkAdded).toHaveBeenCalledWith(url);
+    });
+
+    it("renders any EditorLinkPreviews passed in via the `previews` prop", () => {
+      const previews = [
+        <EditorLinkPreview />,
+        <EditorLinkPreview />,
+        <EditorLinkPreview />,
+      ];
+      wrapper = render({ onLinkAdded, previews });
+      expect(wrapper.find(EditorLinkPreview).length).toEqual(3);
+    });
+
+    it("calls the onClose callback if one is passed when the close icon is clicked", () => {
+      const onClose = jest.fn();
+      const previews = [
+        <EditorLinkPreview onClose={onClose} url="foo" />,
+        <EditorLinkPreview />,
+        <EditorLinkPreview />,
+      ];
+      wrapper = render({ onLinkAdded, previews });
+      wrapper.find(EditorLinkPreview).find(IconButton).simulate("click");
+      expect(onClose).toHaveBeenCalledWith("foo");
     });
   });
 

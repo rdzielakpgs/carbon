@@ -132,6 +132,8 @@ const OptionsHelper = {
     "email_switch",
     "ellipsis_horizontal",
     "ellipsis_vertical",
+    "envelope_dollar",
+    "envelope_euro",
     "error",
     "error_square",
     "euro",
@@ -202,6 +204,7 @@ const OptionsHelper = {
     "refresh",
     "refresh_clock",
     "remove",
+    "sage_coin",
     "save",
     "scan",
     "search",
@@ -223,6 +226,7 @@ const OptionsHelper = {
     "three_boxes",
     "tick",
     "tick_circle",
+    "undo",
     "unlocked",
     "upload",
     "uploaded",
@@ -274,7 +278,7 @@ const OptionsHelper = {
 
   sizesPod: ["extra-small", "small", "medium", "large", "extra-large"],
 
-  iconSizes: ["small", "medium", "large", "extra-large"],
+  iconSizes: ["extra-small", "small", "medium", "large", "extra-large"],
 
   sizesRestricted: ["small", "medium", "large"],
 

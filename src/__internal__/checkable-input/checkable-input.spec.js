@@ -46,7 +46,7 @@ describe("CheckableInput", () => {
           .find(Label)
           .find("label");
 
-        expect(labelWrapper.prop("id")).toBe("foo-label");
+        expect(labelWrapper.prop("id")).toBe("foo label");
       });
     });
   });
@@ -202,19 +202,6 @@ describe("StyledCheckableInputWrapper", () => {
             ${StyledLabelContainer}
           `,
         }
-      );
-    });
-  });
-
-  describe("when setting ml", () => {
-    it("renders the correct left margin", () => {
-      const wrapper = render({ ml: "50%" }).toJSON();
-
-      assertStyleMatch(
-        {
-          marginLeft: "50%",
-        },
-        wrapper
       );
     });
   });

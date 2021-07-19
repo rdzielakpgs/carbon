@@ -99,6 +99,37 @@ describe("ButtonToggleGroup", () => {
     });
   });
 
+  describe("children", () => {
+    it("validates the incorrect children prop", () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+      const InvalidComponent = React.forwardRef(() => <div />);
+      mount(
+        <ButtonToggleGroup name="name" id="id">
+          <InvalidComponent />
+          <InvalidComponent />
+        </ButtonToggleGroup>
+      );
+
+      const expected =
+        "Warning: Failed prop type: `ButtonToggleGroup` only accepts children of" +
+        " type `ButtonToggle`.\n    in ButtonToggleGroup";
+
+      expect(console.error).toHaveBeenCalledWith(expected); // eslint-disable-line no-console
+    });
+
+    it("accepts empty children", () => {
+      expect(() => {
+        mount(
+          <ButtonToggleGroup>
+            {null}
+            {false}
+            {undefined}
+          </ButtonToggleGroup>
+        );
+      }).not.toThrow();
+    });
+  });
+
   testStyledSystemMargin(
     (props) => (
       <ButtonToggleGroup

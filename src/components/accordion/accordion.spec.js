@@ -9,21 +9,24 @@ import {
   testStyledSystemMargin,
 } from "../../__spec_helper__/test-utils";
 import baseTheme from "../../style/themes/base";
-
+import useResizeObserver from "../../hooks/__internal__/useResizeObserver";
 import Textbox from "../../__experimental__/components/textbox";
 import { Accordion } from ".";
 import {
   StyledAccordionContainer,
   StyledAccordionSubTitle,
   StyledAccordionTitleContainer,
+  StyledAccordionTitle,
   StyledAccordionIcon,
   StyledAccordionContent,
   StyledAccordionContentContainer,
   StyledAccordionHeadingsContainer,
 } from "./accordion.style";
-import AccordionGroup from "./accordion-group.component";
+import AccordionGroup from "./accordion-group/accordion-group.component";
 import ValidationIcon from "../validations";
 import StyledValidationIcon from "../validations/validation-icon.style";
+
+jest.mock("../../hooks/__internal__/useResizeObserver");
 
 const contentHeight = 200;
 
@@ -94,6 +97,15 @@ describe("Accordion", () => {
       },
       wrapper.find(StyledAccordionContent)
     );
+  });
+
+  describe("when title prop is not a string", () => {
+    it("should not render inside of a StyledAccordionTitle", () => {
+      render({ title: <div id="customTitle">Title content</div> });
+
+      expect(wrapper.find(StyledAccordionTitle).exists()).toBe(false);
+      expect(wrapper.find("#customTitle").exists()).toBe(true);
+    });
   });
 
   describe(" with headerSpacing prop", () => {
@@ -220,17 +232,7 @@ describe("Accordion", () => {
       isCollapsed(wrapper);
     });
 
-    describe("when window resizes", () => {
-      beforeEach(() => {
-        wrapper = mount(
-          <AccordionGroup>
-            <Accordion title="Title_1" defaultExpanded>
-              <div>Foo</div>
-            </Accordion>
-          </AccordionGroup>
-        );
-      });
-
+    describe("resize observer", () => {
       it("recalculates the content height", () => {
         act(() => render({ expanded: true }));
         wrapper.update();
@@ -252,11 +254,14 @@ describe("Accordion", () => {
             "get"
           )
           .mockImplementation(() => newContentHeight);
+
         act(() => {
           global.innerWidth = 500;
           global.innerHeight = 500;
 
-          global.dispatchEvent(new Event("resize"));
+          useResizeObserver.mock.calls[
+            useResizeObserver.mock.calls.length - 1
+          ][1]();
         });
         wrapper.update();
 
@@ -266,10 +271,6 @@ describe("Accordion", () => {
           },
           wrapper.find(StyledAccordionContentContainer)
         );
-      });
-
-      afterEach(() => {
-        wrapper.unmount();
       });
     });
   });

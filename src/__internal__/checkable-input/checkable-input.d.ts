@@ -24,7 +24,9 @@ export interface CommonCheckableInputProps extends ValidationPropTypes {
   /** The name of the the input */
   name?: string;
   /** Specify a callback triggered on blur */
-  onBlur?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement>) => void;
+  /** Specify a callback triggered on focus */
+  onFocus?: (ev: React.FocusEvent<HTMLInputElement>) => void;
   /** Specify a callback triggered on change */
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   /** Flag to configure component as mandatory */
@@ -40,18 +42,18 @@ export interface CheckableInputProps extends CommonCheckableInputProps {
   inputId?: string;
   /** HTML type attribute of the input */
   inputType?: string;
+  /** Value passed to the input */
+  inputValue?: string;
   /** Text alignment of the label */
   labelAlign?: "left" | "right";
   /** A message that the Help component will display */
   labelHelp?: React.ReactNode;
   /** When true label is inline */
   labelInline?: boolean;
-  /** Margin bottom, given number will be multiplied by base spacing unit (8) */
-  mb?: 0 | 1 | 2 | 3 | 4 | 5 | 7;
-  /** Margin left, any valid CSS value */
-  ml?: string;
 }
 
-declare class CheckableInput extends React.Component<CheckableInputProps & React.HTMLProps<HTMLInputElement>> {}
+declare class CheckableInput extends React.Component<
+  CheckableInputProps & React.HTMLProps<HTMLInputElement>
+> {}
 
 export default CheckableInput;
