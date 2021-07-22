@@ -134,14 +134,6 @@ export const Post = () => {
   );
 };
 
-Default.story = {
-  name: "default",
-};
-
-Locale.story = {
-  name: "locale",
-};
-
-Post.story = {
-  name: "post",
-};
+Default.storyName = "default";
+Locale.storyName = "locale";
+Post.storyName = "post";
