@@ -15,7 +15,7 @@ const StyledTitle = styled.h3`
 `;
 
 const StyledActionButton = styled(Button)`
-  visibility: ${({ checked }) => (checked ? "visible" : "hidden")};
+  visibility: ${({ checked }) => (checked ? "visible;" : "hidden;")};
 `;
 
 const StyledSubtitle = styled.h4`
@@ -29,6 +29,7 @@ const StyledAdornment = styled.div`
   position: static;
   z-index: 200;
   margin-right: 16px;
+  visibility: ${({ children }) => (children ? "visible;" : "hidden;")};
 `;
 
 const StyledDescription = styled.p`
@@ -127,6 +128,7 @@ const StyledTitleContainer = styled.div`
   > div:nth-child(1) {
     display: flex;
     flex-grow: 1;
+    align-items: baseline;
   }
 `;
 

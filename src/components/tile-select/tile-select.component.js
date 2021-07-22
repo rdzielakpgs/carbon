@@ -128,9 +128,8 @@ const TileSelect = ({
                   </StyledSubtitle>
                 )}
               </StyledTitleAndSubtitleWrapper>
-              {titleAdornment && (
-                <StyledAdornment>{titleAdornment}</StyledAdornment>
-              )}
+
+              <StyledAdornment>{titleAdornment}</StyledAdornment>
             </div>
 
             <StyledDeselectWrapper hasActionAdornment={!!actionButtonAdornment}>
