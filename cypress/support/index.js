@@ -1,9 +1,14 @@
 import "cypress-axe";
 import "cypress-real-events/support";
 import { setGlobalConfig } from "@storybook/testing-react";
-import * as sbPreview from "../../.storybook/preview";
+import { decorators, parameters } from "../../.storybook/preview";
 
-setGlobalConfig(sbPreview);
+const [withGlobalStyles, withThemeSelector] = decorators;
+
+setGlobalConfig({
+  decorators: [withGlobalStyles, withThemeSelector],
+  parameters,
+});
 
 require("cypress-plugin-tab");
 

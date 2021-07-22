@@ -25,6 +25,4 @@ export const Default = () => {
   return <AppWrapper>{children}</AppWrapper>;
 };
 
-Default.story = {
-  name: "default",
-};
+Default.storyName = "default";

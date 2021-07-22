@@ -82,4 +82,4 @@ export const parameters = {
 
 setupI18n();
 
-export const decorators = [withKnobs, withGlobalStyles, withThemeSelector];
+export const decorators = [withGlobalStyles, withThemeSelector, withKnobs];

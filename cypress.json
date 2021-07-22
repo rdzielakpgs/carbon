@@ -26,6 +26,7 @@
   },
   "component": {
     "componentFolder": "src",
-    "testFiles": "**/*.test.js"
+    "testFiles": "**/*.test.js",
+    "watchForFileChanges": true
   }
 }

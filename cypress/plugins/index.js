@@ -1,5 +1,3 @@
-const injectDevServer = require("@cypress/react/plugins/react-scripts");
-
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -47,12 +45,33 @@ module.exports = (on, config) => {
 
     return launchOptions;
   });
-  /**
-   * @type {Cypress.PluginConfig}
-   */
 
   if (config.testingType === "component") {
-    injectDevServer(on, { ...config, addTranspiledFolders: [".storybook"] });
+    // eslint-disable-next-line global-require
+    require("@cypress/react/plugins/babel")(
+      on,
+      { ...config, addTranspiledFolders: [".storybook"] },
+      {
+        setWebpackConfig: (webpackConfig) => {
+          webpackConfig.module.rules = [
+            {
+              test: /\.(js)$/,
+              exclude: /node_modules/,
+              use: ["babel-loader"],
+            },
+            {
+              test: /\.css$/i,
+              use: ["style-loader", "css-loader"],
+            },
+            {
+              test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+              use: ["file-loader"],
+            },
+          ];
+          return webpackConfig;
+        },
+      }
+    );
   }
 
   return config; // IMPORTANT to return a config
