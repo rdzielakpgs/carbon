@@ -250,7 +250,7 @@ const Tabs = ({
         position={isInSidebar ? "left" : position}
         role="tablist"
         extendedLine={extendedLine}
-        alternateStyling={variant === "alternate" || !!isInSidebar}
+        alternateStyling={variant === "alternate" || isInSidebar}
         noRightBorder={["no right side", "no sides"].includes(borders)}
         isInSidebar={isInSidebar}
       >

@@ -236,7 +236,6 @@ describe("Tabs", () => {
     it("displays the specified Tab", () => {
       const wrapper = render({ selectedTabId: "uniqueid2" });
 
-      // console.log(wrapper.find(Tab).debug())
       expect(wrapper.find(Tab).at(1).props().isTabSelected).toEqual(true);
     });
   });
