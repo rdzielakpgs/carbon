@@ -75,7 +75,7 @@ const StyledFlatTableHeader = styled.th`
       }
 
       &:first-child {
-        padding-right: 0.395em;
+        padding-right: 0.425em;
 
         @media not all and (min-resolution:.001dpcm) {
           @supports (-webkit-appearance:none) and (stroke-color:transparent) {
@@ -92,6 +92,10 @@ const StyledFlatTableHeader = styled.th`
           border-right-width: ${verticalBorderSizes[verticalBorder]};
         `
       }
+
+        &:nth-child(1) {
+          border-left: 1px solid #668592;
+        }
       }
     }
   `}
