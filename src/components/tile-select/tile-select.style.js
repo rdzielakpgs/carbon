@@ -122,7 +122,7 @@ const StyledTileSelectInput = styled(Input)`
 
 const StyledTitleContainer = styled.div`
   display: inline-flex;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 8px;
   position: relative;
   flex-wrap: wrap;
