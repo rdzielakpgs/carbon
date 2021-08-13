@@ -6,6 +6,8 @@ const StyledLoader = styled.div`
   ${margin}
   text-align: center;
   white-space: nowrap;
+  line-height: 0;
+  font-size: 0;
 `;
 
 StyledLoader.defaultProps = {
