@@ -14,6 +14,8 @@ import Search from "../search";
 import { Checkbox } from "../checkbox";
 import Button from "../button";
 import Typography from "../typography";
+import { DraggableContainer, DraggableItem } from "../draggable";
+import StyledIcon from "../icon/icon.style";
 
 export default {
   title: "Design System/DuellingPicklist",
@@ -165,6 +167,115 @@ export const Default = () => {
         >
           {renderItems(selectedItems, "remove", onRemove)}
         </Picklist>
+      </DuellingPicklist>
+    </>
+  );
+};
+
+export const Draggable = () => {
+  const mockData = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 5; i++) {
+      const data = {
+        key: i.toString(),
+        title: `Content ${i + 1}`,
+        description: `Description ${i + 1}`,
+      };
+      arr.push(data);
+    }
+    return arr;
+  }, []);
+
+  const allItems = useMemo(() => {
+    return mockData.reduce((obj, item) => {
+      obj[item.key] = item;
+      return obj;
+    }, {});
+  }, [mockData]);
+
+  const [order] = useState(mockData.map(({ key }) => key));
+  const [notSelectedItems, setNotSelectedItems] = useState(allItems);
+  const [selectedItems, setSelectedItems] = useState({});
+  const [selectedItemsOrder, setSelectedItemsOrder] = useState([]);
+
+  const onAdd = useCallback(
+    (item) => {
+      const { [item.key]: removed, ...rest } = notSelectedItems;
+      setNotSelectedItems(rest);
+      setSelectedItems({ ...selectedItems, [item.key]: item });
+      setSelectedItemsOrder((prev) => [...prev, item.key]);
+    },
+    [notSelectedItems, selectedItems]
+  );
+
+  const onRemove = useCallback(
+    (item) => {
+      const { [item.key]: removed, ...rest } = selectedItems;
+      setSelectedItems(rest);
+      setNotSelectedItems({ ...notSelectedItems, [item.key]: item });
+      setSelectedItemsOrder((prev) => prev.filter((key) => key !== item.key));
+    },
+    [notSelectedItems, selectedItems]
+  );
+
+  const renderPickListItem = (type, item, onChange, draggable, key) => (
+    <PicklistItem key={key} type={type} item={item} onChange={onChange}>
+      {draggable && <StyledIcon key={item.key} type="drag" ml={2} />}
+      <div style={{ display: "flex", width: "100%" }}>
+        <div style={{ width: "50%" }}>
+          <p style={{ fontWeight: 700, margin: 0, marginLeft: 24 }}>
+            {item.title}
+          </p>
+        </div>
+        <div style={{ width: "50%" }}>
+          <p style={{ margin: 0 }}>{item.description}</p>
+        </div>
+      </div>
+    </PicklistItem>
+  );
+
+  const renderItems = useCallback(
+    (list, type, handler, orderArr = order, draggable = false) =>
+      orderArr.reduce((items, key) => {
+        const item = list[key];
+        if (item && draggable) {
+          items.push(
+            <DraggableItem key={item.key} id={item.key}>
+              {renderPickListItem(type, item, handler, true)}
+            </DraggableItem>
+          );
+        }
+        if (item && !draggable) {
+          items.push(renderPickListItem(type, item, handler, false, key));
+        }
+        return items;
+      }, []),
+    [order]
+  );
+
+  return (
+    <>
+      <DuellingPicklist
+        leftLabel={`List 1 (${Object.keys(notSelectedItems).length})`}
+        rightLabel={`List 2 (${Object.keys(selectedItems).length})`}
+      >
+        <Picklist placeholder={<div>Your first own placeholder</div>}>
+          {renderItems(notSelectedItems, "add", onAdd)}
+        </Picklist>
+        <PicklistDivider />
+        <DraggableContainer
+          getOrder={(draggableItemIds) => {
+            setSelectedItemsOrder(draggableItemIds);
+          }}
+        >
+          {renderItems(
+            selectedItems,
+            "remove",
+            onRemove,
+            selectedItemsOrder,
+            true
+          )}
+        </DraggableContainer>
       </DuellingPicklist>
     </>
   );
@@ -429,6 +540,15 @@ export const InDialog = () => {
 
 Default.story = {
   name: "default",
+  parameters: {
+    chromatic: {
+      disable: false,
+    },
+  },
+};
+
+Draggable.story = {
+  name: "draggable",
   parameters: {
     chromatic: {
       disable: false,

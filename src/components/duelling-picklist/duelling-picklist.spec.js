@@ -30,6 +30,7 @@ import {
 } from "./picklist-group/picklist-group.style";
 import { StyledPicklist } from "./picklist/picklist.style";
 import { areEqual } from "./picklist/picklist.component";
+import { DraggableContainer } from "../draggable";
 
 const EmptyComponent = () => <div />;
 
@@ -815,7 +816,19 @@ describe("DuellingPicklist", () => {
   });
 
   describe("children", () => {
-    it("should throw an error if there are not two Picklist components", () => {
+    it("should not throw an error if there are one Picklist and one DraggableContainer selected", () => {
+      jest.spyOn(global.console, "error").mockImplementation(() => {});
+      mount(
+        <DuellingPicklist>
+          <Picklist placeholder="placeholder" />
+          <DraggableContainer />
+        </DuellingPicklist>
+      );
+      // eslint-disable-next-line no-console
+      expect(console.error).not.toBeCalled();
+      global.console.error.mockReset();
+    });
+    it("should throw an error if there are invalid components components", () => {
       jest.spyOn(global.console, "error").mockImplementation(() => {});
       mount(
         <DuellingPicklist>
@@ -824,7 +837,8 @@ describe("DuellingPicklist", () => {
       );
       // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith(
-        "Warning: Failed prop type: `children` must have two `Picklist`s\n    in DuellingPicklist"
+        `Warning: Failed prop type: \`children\` must have two \`Picklist\`s or one Picklist and one undefined
+    in DuellingPicklist`
       );
       global.console.error.mockReset();
     });
